@@ -2,6 +2,8 @@
 
     define('ROOT',__DIR__.'/../');
 
+    //引入视图文件
+    require(ROOT.'libs/view.php');
     //类的自动加载
      function auload($class){
 
@@ -27,4 +29,5 @@
 
     $c = new $controller;
     $c->$action();
+    
     

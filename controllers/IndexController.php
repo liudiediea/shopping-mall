@@ -2,8 +2,12 @@
 namespace controllers;
 
 class IndexController{
-    
+
     public function index(){
-        echo "hello index";
+       
+        view('index/index',[
+            "name" => "tom",
+            "age" => 12,
+        ]);
     }
 }
