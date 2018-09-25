@@ -5,9 +5,15 @@ class IndexController{
 
     public function index(){
        
-        view('index/index',[
-            "name" => "tom",
-            "age" => 12,
-        ]);
+        view('index/index');
+    }
+    public function main(){
+        view('index/main');
+    }
+    public function left(){
+        view('index/left');
+    }
+    public function top(){
+        view('index/top');
     }
 }
