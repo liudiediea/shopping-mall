@@ -1,19 +1,23 @@
 <?php
 namespace controllers;
 
-class BlogsController{
+class BlogController{
 
     public function index(){
-        view('blogs/index');
+        view('blog/index');
     }
     public function add(){
-        view('blogs/add');
+        view('blog/add');
     }
     public function doadd(){
 
+        $blog = new \models\Blog;
+        // 为模型填充数据
+        $blog->fill($_POST);
+        $blog->doadd();
     }
     public function edit(){
-        view('blogs/edit');
+        view('blog/edit');
     }
 
     public function doedit(){
