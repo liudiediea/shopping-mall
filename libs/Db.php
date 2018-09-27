@@ -28,4 +28,9 @@ class Db{
     public function exec($sql){
         return $this->pdo->exec($sql);
     }
+
+    public function lastInsertId()
+    {
+        return $this->pdo->lastInsertId();
+    }
 }

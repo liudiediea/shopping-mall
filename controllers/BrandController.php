@@ -1,38 +1,38 @@
 <?php
 namespace controllers;
 
-use models\Category;
+use models\Brand;
 
-class CategoryController{
+class BrandController{
     // 列表页
     public function index()
     {
-        $model = new Category;
+        $model = new Brand;
         $data = $model->findAll();
-        view('category/index', $data);
+        view('brand/index', $data);
     }
 
     // 显示添加的表单
     public function create()
     {
-        view('category/create');
+        view('brand/create');
     }
 
     // 处理添加表单
     public function insert()
     {
-        $model = new Category;
+        $model = new Brand;
         $model->fill($_POST);
         $model->insert();
-        redirect('/category/index');
+        redirect('/brand/index');
     }
 
     // 显示修改的表单
     public function edit()
     {
-        $model = new Category;
+        $model = new Brand;
         $data=$model->findOne($_GET['id']);
-        view('category/edit', [
+        view('brand/edit', [
             'data' => $data,    
         ]);
     }
@@ -40,17 +40,17 @@ class CategoryController{
     // 修改表单的方法
     public function update()
     {
-        $model = new Category;
+        $model = new Brand;
         $model->fill($_POST);
         $model->update($_GET['id']);
-        redirect('/category/index');
+        redirect('/brand/index');
     }
 
     // 删除
     public function delete()
     {
-        $model = new Category;
+        $model = new Brand;
         $model->delete($_GET['id']);
-        redirect('/category/index');
+        redirect('/brand/index');
     }
 }
