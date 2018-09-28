@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <title>管理中心 - 添加新记录</title>
     <meta name="robots" content="noindex, nofollow">
@@ -7,6 +8,7 @@
     <link href="/Styles/general.css" rel="stylesheet" type="text/css" />
     <link href="/Styles/main.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <h1>
         <span class="action-span"><a href="/goods/index">数据列表</a></span>
@@ -17,69 +19,238 @@
     <div class="main-div">
         <form action="/goods/insert" method="post" enctype="multipart/form-data">
             <table width="100%" id="general-table">
-                                <tr>
+                <tr>
                     <td class="label">商品名称:</td>
                     <td>
-                                                    <input type='text' size="80" name='goods_name'>
-                                                <font color="red">*</font>
+                        <input type='text' size="80" name='goods_name'>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">LOGO:</td>
                     <td>
-                                                    <input type='text' size="80" name='logo'>
-                                                <font color="red">*</font>
+                        <input type='text' size="80" name='logo'>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">是否上架:</td>
                     <td>
-                                                    <input type="radio" name="is_on_sale" value="y" checked> 是
-                            <input type="radio" name="is_on_sale" value="n"> 否
-                                                <font color="red">*</font>
+                        <input type="radio" name="is_on_sale" value="y" checked> 是
+                        <input type="radio" name="is_on_sale" value="n"> 否
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">商品描述:</td>
                     <td>
-                                                    <textarea name="description" id="" cols="80" rows="10"></textarea>
-                                                <font color="red">*</font>
+                        <textarea name="description" id="" cols="80" rows="10"></textarea>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">一级分类ID:</td>
                     <td>
-                                                    <input type='text' size="80" name='cat1_id'>
-                                                <font color="red">*</font>
+                        <select name="cat1_id" id="">
+
+                            <option value="">选择一级分类</option>
+                            <?php foreach($classone as $v): ?>
+                            <option value="<?=$v['id']?>">
+                                <?=$v['cat_name']?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">二级分类ID:</td>
                     <td>
-                                                    <input type='text' size="80" name='cat2_id'>
-                                                <font color="red">*</font>
+                        <select name="cat2_id" id="">                   
+                        </select>
+                            <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">三级分类ID:</td>
                     <td>
-                                                    <input type='text' size="80" name='cat3_id'>
-                                                <font color="red">*</font>
+                        <select name="cat3_id" id="">
+                        </select>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">品牌ID:</td>
                     <td>
-                                                    <input type='text' size="80" name='brand_id'>
-                                                <font color="red">*</font>
+                        <input type='text' size="80" name='brand_id'>
+                        <font color="red">*</font>
                     </td>
                 </tr>
-                            </table>
+            </table>
+
+            <h3>商品属性</h3>
+            <input type="button" id="attr-btn" value="添加一个属性">
+
+            <div id="attr-content">
+                <table width="100%" id="general-table">
+                    <tr>
+                        <td class="label">商品名称:</td>
+                        <td>
+                            <input type='text' size="80" name='attr_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">商品值:</td>
+                        <td>
+                            <input type='text' size="80" name='attr_value[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>商品图片 <input id="btn-image" type="button" value="添加一个图片"></h3>
+
+            <div id="image-container">
+                <table width="100%">
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input class="preview" type='file' name='image[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <div class="button-div">
                 <input type="submit" value=" 确定 " />
                 <input type="reset" value=" 重置 " />
             </div>
         </form>
     </div>
-    <?=view('common/footer')?></body>
+
+    <?=view('common/footer')?>
+</body>
+
 </html>
+<script src="/Js/jquery.min.js"></script>
+<script src="/Js/img_preview.js"></script>
+<script>
+    var str = `<hr><table width="100%" id="general-table">
+    <tbody>
+                <tr>
+                    <td class="label">商品名称:</td>
+                    <td>
+                        <input type='text' size="80" name='goods_name'>
+                        <font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">商品值:</td>
+                    <td>
+                        <input type='text' size="80" name='goods_name'>
+                        <font color="red">*</font>
+                    </td>
+                    <td class="label"></td>
+                    <td> 
+                        <input type="button" onclick="attr_del(this)" value="删除">
+                    </td>
+                </tr>
+               
+             </tbody>
+            </table>`;
+    var imageStr = `<table width="100%"><tbody>
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input class="preview" type='file' name='image[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input onclick="attr_del(this)" type="button" value="删除">
+                        </td>
+                    </tr>
+                </tbody></table>`
+    $("#attr-btn").click(function () {
+        $("#attr-content").append(str);
+    })
+
+    function attr_del(o) {
+        var table = $(o).parent().parent().parent().parent();
+        table.prev('hr').remove();
+        table.remove();
+    }
+
+
+    $("#btn-image").click(function () {
+
+        // 添加一个图片
+        $("#image-container").append(imageStr)
+        $(".preview").change(function () {
+
+            var file = this.files[0];
+            var str = getObjectUrl(file);
+            $(this).prev('.img_preview').remove();
+            $(this).before("<div class='img_preview'><img src='" + str + "' width='120'></div>");
+
+        })
+
+    })
+
+    //三级联动
+    $("select[name=cat1_id]").change(function () {
+        var id = $(this).val()
+        if(id!="") {
+            // alert( id);
+            $.ajax({
+                type:"GET",
+                url:"/goods/ajax_get_cat?id="+id,
+                dataType:"json",
+                success:function(data) {
+                    var str = "";
+                    
+                    for(var i = 0;i<data.data.length;i++){
+                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';                    }
+
+                    $("select[name=cat2_id]").html(str)
+                    $("select[name=cat2_id]").trigger('change')
+                }
+                
+                
+            });
+       
+        }else{
+            $("select[name=cat2_id]").html("");
+            $("select[name=cat3_id]").html("");
+        }
+                
+        
+
+    });
+    $("select[name=cat2_id]").change(function () {
+        //取出这个分类id
+        var id = $(this).val()
+        if (id != "") {
+            $.ajax({
+                type:"GET",
+                url:"/goods/ajax_get_cat?id="+id,
+                dataType:"json",
+                success:function(data) {
+                    var str = "";
+                    
+                    for(var i = 0;i<data.data.length;i++){
+                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';                    }
+
+                    $("select[name=cat3_id]").html(str)
+                    
+                }
+            });
+
+        }
+
+    });
+</script>

@@ -14,8 +14,24 @@ class GoodsController{
 
     // 显示添加的表单
     public function create()
-    {
-        view('goods/create');
+    {   
+       
+        $model = new \models\Category;  
+        $getclassone = $model->getclass();
+        // echo '<pre>';
+        // var_dump($getclassone);
+        
+        
+        view('goods/create',[
+            'classone' => $getclassone['data']
+        ]);
+    }
+
+    public function ajax_get_cat(){
+        $id = (int)$_GET['id'];
+        $model = new \models\Category;
+        $data = $model->getclass($id);
+        echo json_encode($data);
     }
 
     // 处理添加表单
@@ -53,4 +69,5 @@ class GoodsController{
         $model->delete($_GET['id']);
         redirect('/goods/index');
     }
+
 }
