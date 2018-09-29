@@ -7,4 +7,93 @@ class Goods extends Model
     protected $table = 'goods';
     // 设置允许接收的字段
     protected $fillable = ['goods_name','logo','is_on_sale','description','cat1_id','cat2_id','cat3_id','brand_id'];
+
+    public function _before_write(){
+
+       
+        $this->delete_img();
+        //添加上传图片的代码
+        $upload = \libs\Upload::getInstance();
+        $logo = '/uploads/'.$upload->upload('logo','goods');
+
+        //吧logo加到数组中 插入数据库
+        $this->data['logo'] = $logo;
+    }
+
+    public function _after_write(){
+        /*
+            处理商品属性
+        */
+        // var_dump($_POST);
+        $stmt = $this->_db->prepare("INSERT INTO goods_attribute
+        (attr_name,attr_value,goods_id) VALUES(?,?,?)");
+        foreach($_POST['attr_name'] as $k=>$v){
+              $stmt->execute([
+                $v,
+                $_POST['attr_value'][$k],
+                $this->data['id'],
+            ]);
+        
+        }
+         /*
+            处理商品图片
+        */
+        $upload = \libs\Upload::getInstance();
+
+        $stmt = $this->_db->prepare("INSERT INTO goods_image(goods_id,path) VALUES(?,?)");
+
+        $_tmp = [];
+        foreach($_FILES['image']['name'] as $k=>$v){
+            // 拼出每张图片需要的数组
+            $_tmp['name'] = $v;
+            $_tmp['type'] = $_FILES['image']['type'][$k];
+            $_tmp['tmp_name'] = $_FILES['image']['tmp_name'][$k];
+            $_tmp['error'] = $_FILES['image']['error'][$k];
+            $_tmp['size'] = $_FILES['image']['size'][$k];
+
+            
+            $_FILES['tmp'] = $_tmp;
+            //           tmp： 图片在 $_FILES中的名字  
+            $path = '/uploads/'.$upload->upload('tmp','goods');
+
+            $stmt->execute([
+                $this->data['id'],
+                $path,
+            ]);
+
+        }
+        
+
+         /*
+            处理商品sku
+        */
+
+        $stmt = $this->_db->prepare("INSERT INTO goods_sku
+                (goods_id,sku_name,stock,price) VALUES(?,?,?,?)");
+
+        foreach($_POST['sku_name'] as $k => $v)
+        {
+            $stmt->execute([
+                $this->data['id'],
+                $v,
+                $_POST['stock'][$k],
+                $_POST['price'][$k],
+            ]);
+        } 
+    }
+
+    //删除之前被调用
+    public function _before_delete(){
+        $this->delete_img();
+     }
+      public function delete_img(){
+          
+         //如果修改就删除原图片
+         if(isset($_GET['id'])){
+             
+             //取出原来logo 并且删除
+             $oldlogo = $this->findOne($_GET['id']);
+             @unlink(ROOT.'public'.$oldlogo['logo']);
+         }
+      }
 }

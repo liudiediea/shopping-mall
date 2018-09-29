@@ -32,7 +32,9 @@
         <?php foreach($data as $v): ?>        <tr>
                         <td><?=$v['id']?></td>
                         <td><?=$v['goods_name']?></td>
-                        <td><?=$v['logo']?></td>
+                        <td>
+                          <img src="<?=$v['logo']?>" width="50" alt="">
+                        </td>
                         <td><?=$v['is_on_sale']?></td>
                         <td><?=$v['description']?></td>
                         <td><?=$v['cat1_id']?></td>
@@ -60,3 +62,5 @@
 
 <?=view('common/footer')?></body>
 </html>
+<script src="/Js/jquery.min.js"></script>
+<script src="/Js/img_preview.js"></script>

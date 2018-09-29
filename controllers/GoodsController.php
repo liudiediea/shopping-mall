@@ -26,7 +26,7 @@ class GoodsController{
             'classone' => $getclassone['data']
         ]);
     }
-
+    //获取子分类
     public function ajax_get_cat(){
         $id = (int)$_GET['id'];
         $model = new \models\Category;

@@ -29,7 +29,8 @@
                 <tr>
                     <td class="label">LOGO:</td>
                     <td>
-                        <input type='text' size="80" name='logo'>
+
+                        <input class="preview" type='file' size="80" name='logo'>
                         <font color="red">*</font>
                     </td>
                 </tr>
@@ -66,9 +67,9 @@
                 <tr>
                     <td class="label">二级分类ID:</td>
                     <td>
-                        <select name="cat2_id" id="">                   
+                        <select name="cat2_id" id="">
                         </select>
-                            <font color="red">*</font>
+                        <font color="red">*</font>
                     </td>
                 </tr>
                 <tr>
@@ -110,8 +111,8 @@
                 </table>
             </div>
 
-            <h3>商品图片 <input id="btn-image" type="button" value="添加一个图片"></h3>
-
+            <h3>商品图片 </h3>
+            <input id="btn-image" type="button" value="添加一个图片">
             <div id="image-container">
                 <table width="100%">
                     <tr>
@@ -122,6 +123,32 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+
+
+            <h3>商品SKU </h3>
+            <input id="btn-sku" type="button" value="添加一个SKU">
+            <div id="sku-container">
+                <table width="100%">
+                    <tr>
+                        <td class="label">SKU名称</td>
+                        <td>
+                            <input type='text' name='sku_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                        <td class="label">库存量</td>
+                        <td>
+                            <input type='text' name='stock[]'>
+                            <font color="red">*</font>
+                        </td>
+                        <td class="label">价格</td>
+                        <td>
+                            <input type='text' name='price[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
             <div class="button-div">
                 <input type="submit" value=" 确定 " />
@@ -142,21 +169,26 @@
                 <tr>
                     <td class="label">商品名称:</td>
                     <td>
-                        <input type='text' size="80" name='goods_name'>
+                        <input type='text' size="80" name='attr_name[]'>
                         <font color="red">*</font>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">商品值:</td>
                     <td>
-                        <input type='text' size="80" name='goods_name'>
+                        <input type='text' size="80" name='attr_value[]'>
                         <font color="red">*</font>
                     </td>
                     <td class="label"></td>
-                    <td> 
-                        <input type="button" onclick="attr_del(this)" value="删除">
-                    </td>
+                    
+                    
                 </tr>
+                <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input onclick="attr_del(this)" type="button" value="删除">
+                        </td>
+                    </tr>
                
              </tbody>
             </table>`;
@@ -175,6 +207,33 @@
                         </td>
                     </tr>
                 </tbody></table>`
+    var skuStr = `  <table width="100%">
+                  <tbody>
+                        <tr>
+                        <td class="label">SKU名称</td>
+                        <td>
+                            <input type='text' name='sku_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                        <td class="label">库存量</td>
+                        <td>
+                            <input type='text' name='stock[]'>
+                            <font color="red">*</font>
+                        </td>
+                        <td class="label">价格</td>
+                        <td>
+                            <input  type='text' name='price[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input onclick="attr_del(this)" type="button" value="删除">
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>`
     $("#attr-btn").click(function () {
         $("#attr-content").append(str);
     })
@@ -200,35 +259,38 @@
         })
 
     })
-
+    $("#btn-sku").click(function () {
+        $("#sku-container").append(skuStr);
+    })
     //三级联动
     $("select[name=cat1_id]").change(function () {
         var id = $(this).val()
-        if(id!="") {
+        if (id != "") {
             // alert( id);
             $.ajax({
-                type:"GET",
-                url:"/goods/ajax_get_cat?id="+id,
-                dataType:"json",
-                success:function(data) {
+                type: "GET",
+                url: "/goods/ajax_get_cat?id=" + id,
+                dataType: "json",
+                success: function (data) {
                     var str = "";
-                    
-                    for(var i = 0;i<data.data.length;i++){
-                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';                    }
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        str += '<option value="' + data.data[i].id + '">' + data.data[i].cat_name + '</option>';
+                    }
 
                     $("select[name=cat2_id]").html(str)
                     $("select[name=cat2_id]").trigger('change')
                 }
-                
-                
+
+
             });
-       
-        }else{
+
+        } else {
             $("select[name=cat2_id]").html("");
             $("select[name=cat3_id]").html("");
         }
-                
-        
+
+
 
     });
     $("select[name=cat2_id]").change(function () {
@@ -236,17 +298,18 @@
         var id = $(this).val()
         if (id != "") {
             $.ajax({
-                type:"GET",
-                url:"/goods/ajax_get_cat?id="+id,
-                dataType:"json",
-                success:function(data) {
+                type: "GET",
+                url: "/goods/ajax_get_cat?id=" + id,
+                dataType: "json",
+                success: function (data) {
                     var str = "";
-                    
-                    for(var i = 0;i<data.data.length;i++){
-                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';                    }
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        str += '<option value="' + data.data[i].id + '">' + data.data[i].cat_name + '</option>';
+                    }
 
                     $("select[name=cat3_id]").html(str)
-                    
+
                 }
             });
 
