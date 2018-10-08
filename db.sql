@@ -80,3 +80,5 @@ create table goods_sku
     price decimal(10,2) not null comment '价格',
     primary key (id)
 )engine=InnoDB comment='商品SKU表';
+
+
