@@ -48,6 +48,20 @@ class Admin extends Model
         if($info){
             $_SESSION['id'] = $info['id'];
             $_SESSION['username'] = $info['username'];
+
+            //判断是否是超级管理员
+           $stmt =  $this->_db->prepare('select count(*) from admin_role where role_id = 1 and admin_id='.$_SESSION['id']);
+           $stmt->execute([$_SESSION['id']]);
+           $c = $stmt->fetch(\PDO::FETCH_COLUMN);
+            if($c > 0){
+               
+                $_SESSION['root'] = true;
+            }
+            else{
+                 //取出这个管理员有权访问的路径
+                $_SESSION['url_path'] = $this->getUrlPath( $_SESSION['id']);
+            }
+          
         }else{
             throw new \Exception('error');
         }
@@ -55,5 +69,37 @@ class Admin extends Model
     public function logout(){
         $_SESSION = [];
         session_destroy();
+    }
+
+    public function getUrlPath($adminId){
+        $sql = '
+             select p.url_path,ar.role_id
+            from admin_role ar
+            left JOIN role_privlege rp on ar.role_id = rp.role_id
+            left JOIN privilege p on rp.pri_id = p.id
+            where ar.admin_id = ?';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->execute([
+            $adminId,
+        ]);
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        //把二维数组转为一维数组
+        $ret = [];
+        foreach($data as $v){
+            
+            if(false === strpos($v['url_path'],',')){
+                $ret[] = $v['url_path'];
+            }
+            else{
+                //如果有， 就转成数组
+                $tt = explode(',',$v['url_path']);
+                //把转完之后的数组合并到一维数组中
+                $ret = array_merge($ret,$tt);
+            }
+            
+        }
+        return $ret;
+
     }
 }

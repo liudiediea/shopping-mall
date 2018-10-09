@@ -5,6 +5,10 @@ use models\Admin;
 
 class LoginController{
 
+    public function test(){
+        $model = new \models\Admin;
+        $model -> getUrlPath(17);       
+    }
     public function login(){
         view('login/login');
     }
@@ -23,6 +27,8 @@ class LoginController{
             //如果登陆失败就走到这
             redirect('/login/login');
         }
+
+        
         
     }
     public function logout(){
@@ -30,4 +36,5 @@ class LoginController{
         $model->logout();
         redirect('/login/login');
     }
+   
 }

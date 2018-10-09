@@ -82,3 +82,8 @@ create table goods_sku
 )engine=InnoDB comment='商品SKU表';
 
 
+select p.url_path,ar.role_id
+from admin_role ar
+left JOIN role_privlege rp on ar.role_id = rp.role_id
+left JOIN privilege p on rp.pri_id = p.id
+where ar.admin_id = 17
