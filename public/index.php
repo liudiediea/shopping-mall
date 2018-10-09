@@ -2,6 +2,9 @@
 
     define('ROOT',__DIR__.'/../');
 
+
+    session_start();
+
     //引入视图文件
     require(ROOT.'libs/view.php');
     //类的自动加载
