@@ -20,7 +20,7 @@ class GoodsController extends BaseController{
         $getclassone = $model->getclass();
         // echo '<pre>';
         // var_dump($getclassone);
-        
+        // die;
         
         view('goods/create',[
             'classone' => $getclassone['data']
