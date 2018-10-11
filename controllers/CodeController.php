@@ -18,7 +18,7 @@ class CodeController extends BaseController
         $stmt->execute();
         // 取出数据
         $fields = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-
+            // var_dump($fields);die;
         // 收集所有字段的白名单
         $fillable = [];
         foreach($fields as $v)
