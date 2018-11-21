@@ -15,7 +15,7 @@ class GoodsController extends BaseController{
     // 显示添加的表单
     public function create()
     {   
-       
+       //取出一级分类
         $model = new \models\Category;  
         $getclassone = $model->getclass();
         // echo '<pre>';
@@ -47,9 +47,16 @@ class GoodsController extends BaseController{
     public function edit()
     {
         $model = new Goods;
-        $data=$model->findOne($_GET['id']);
+        $data=$model->getfullInfo($_GET['id']);
+        // echo '<pre>';
+        // var_dump($data);
+        // die;
+        //取出一级分类
+        $model = new \models\Category;  
+        $getclassone = $model->getclass();
         view('goods/edit', [
-            'data' => $data,    
+            'data' => $data,
+            'classone' => $getclassone['data']
         ]);
     }
 
